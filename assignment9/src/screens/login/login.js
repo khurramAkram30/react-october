@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 // import '../App.css';
 import firebase from '../../auth/firebase';
+import Profile from '../profile/profile';
 import { constants } from 'fs';
-import { BrowserRouter as Router, Route, Link,Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link,Redirect,HashRouter } from 'react-router-dom';
 import Routes from '../../config/routes';
 // import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
@@ -15,26 +16,17 @@ class Login extends Component {
     console.log("ad");
   }
   login(){
-      firebase.auth().signInWithPopup(provider).then(function(result) {
+      const {pro}=this.props;
+      firebase.auth().signInWithPopup(provider).then(function(result,) {
+        console.log("props",pro);
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           var token = result.credential.accessToken;
           // The signed-in user info.
           var user = result.user;
           // ...
-          console.log("user",user);
+            console.log("user",user);
           console.log("token",token);
           this.props.history.push('./profile/profile');
-          if(user !== null && token !== null){
-        //     <Redirect
-        //     to={{
-        //       pathname: "./profile/profile",
-        //     //   state: { from: props.location }
-        //     }}
-        //   />
-        }
-        else{
-          console.log("session end");
-        }
       }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -54,6 +46,7 @@ class Login extends Component {
       <div>
           <h1>
             connect with facebook
+    
           </h1>
           <button onClick={this.login}>Login</button>
       </div>

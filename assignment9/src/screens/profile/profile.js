@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import firebase from '../../auth/firebase';
 import { constants } from 'fs';
 // import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-import Firestore from 'firebase/firestore';
+// import Firestore from 'firebase/firestore';
 class Profile extends Component {
   constructor() {
     super();
@@ -12,6 +12,8 @@ class Profile extends Component {
       phone_number:''
     }
     // this.name=this.name.bind(this);
+    this.addUser=this.addUser.bind(this);
+  
   }
 
 
@@ -21,26 +23,61 @@ class Profile extends Component {
       name:e.target.value
     })
   }
+
+
   phone(e){
     const {phone_number} =this.state;
     this.setState({
       phone_number:e.target.value
     })
   }
+
+  addUser = e => {
+    e.preventDefault();
+    this.setState({
+      fullname: '',
+      email:''
+    });
+  };
+
+  addUser = e => {
+    e.preventDefault();
+    const db = firebase.firestore();
+    db.settings({
+      timestampsInSnapshots: true
+    });
+    var userRef = db.collection("users").add({
+      fullname: this.state.name,
+      email: this.state.phone_number
+    });  
+    this.setState({
+      fullname: '',
+      email: ''
+    });
+  };
+
+
   render() {
     const {name,phone_number} =  this.state;
-    console.log(name,phone_number);
    
-    Firestore().collection('users').add({
-      title: this.state.textInput,
-      complete: false,
-    })    
+   
+    
     return(
-      <div>
+      <div className="conatiner">
          <h4 style={{textAlign:"center"}}>Add Personal Info </h4>
-         <input type="text" onChange={this.search.bind(this)}/>
-         <input type="number" onChange={this.phone.bind(this)}/>
- 
+        <div className="row">
+         <div className="col-md-4"></div>
+      <div className="col-md-4">
+         <form onSubmit={this.addUser}>
+         <input type="text" placeholder="Enter Your Name" className="form-control" onChange={this.search.bind(this)} />
+         <br />
+         <input type="number" placeholder="Enter Your Number" className="form-control" onChange={this.phone.bind(this)}/>
+         <br />
+         <button type="submit" className="btn btn-primary">Add</button>
+ </form>
+         </div>
+         <div className="col-md-4"></div>
+ </div>
       </div>
       
    )
@@ -80,4 +117,4 @@ export default Profile;
 // .catch((error) => {
 //     var errMessage = error.message;
 //     console.log(errMessage);
-// })
+// })/

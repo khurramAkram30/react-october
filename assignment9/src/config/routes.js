@@ -9,6 +9,7 @@ const Routes = () => (
         <Route path="/profile" component={Screens.Profile} />
         <Route path="/Allimg" component={Screens.Allimg} />
         <Route path="/Map" component={Screens.Maps} />
+        <Route path="/Beverages" component={Screens.Beverages} />
         
         
         {/* <Route path="/addForm" component={Screens.AddForm} /> */}

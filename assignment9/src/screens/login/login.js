@@ -12,22 +12,38 @@ var provider = new firebase.auth.FacebookAuthProvider();
 class Login extends Component {
   constructor(props) {
     super(props);
+   this.state={
+   }
     this.login=this.login.bind(this);
-    console.log("ad");
+    // console.log(props);
   }
   login(){
-      const {pro}=this.props;
+      // const {pop}=this.state;
       firebase.auth().signInWithPopup(provider).then(function(result,) {
-        console.log("props",pro);
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           var token = result.credential.accessToken;
           // The signed-in user info.
           var user = result.user;
-          // ...
-            console.log("user",user);
-          console.log("token",token);
-          this.props.history.push('./profile/profile');
-      }).catch(function(error) {
+          // this.pop.history.push('../profile/profile')
+          let currentuserdata = [];
+          if (user != null) {
+              user.providerData.forEach(function (profile) {
+                  currentuserdata.push({
+                      'provider': profile.providerId,
+                      'name': profile.displayName,
+                      'email': profile.email,
+                      'photourl': profile.photoURL,
+                      'uid': profile.uid
+                  })
+                });
+              
+              }
+                localStorage.setItem("user_data",JSON.stringify(currentuserdata));
+                var user_datas=localStorage.getItem("user_data");
+                
+                // console.log("user",user_datas);
+      
+              }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;

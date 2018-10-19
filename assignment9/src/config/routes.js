@@ -5,8 +5,12 @@ import * as Screens from '../screens/index'
 const Routes = () => (
     <Router>
       <div>
-        <Route exact path="/" component={Screens.Login} />
+        <Route exact path="/login" component={Screens.Login} />
         <Route path="/profile" component={Screens.Profile} />
+        <Route path="/Allimg" component={Screens.Allimg} />
+        <Route path="/Map" component={Screens.Maps} />
+        
+        
         {/* <Route path="/addForm" component={Screens.AddForm} /> */}
       </div>  
     </Router>

@@ -16,7 +16,7 @@ class Profile extends Component {
   
   }
 
-
+  
   search(e){
     const {name} =this.state;
     this.setState({
@@ -32,27 +32,29 @@ class Profile extends Component {
     })
   }
 
-  addUser = e => {
-    e.preventDefault();
-    this.setState({
-      fullname: '',
-      email:''
-    });
-  };
+  // addUser = e => {
+  //   e.preventDefault();
+  //   this.setState({
+  //     fullname: '',
+  //     email:''
+  //   });
+  // };
 
   addUser = e => {
     e.preventDefault();
+    var user_datas=localStorage.getItem("user_data");
+    console.log("hihihihi",user_datas);
     const db = firebase.firestore();
     db.settings({
       timestampsInSnapshots: true
     });
     var userRef = db.collection("users").add({
-      fullname: this.state.name,
-      email: this.state.phone_number
+      Name: this.state.name,
+      Phone_Number: this.state.phone_number
     });  
     this.setState({
-      fullname: '',
-      email: ''
+      name: '',
+      phone_number: ''
     });
   };
 
@@ -69,11 +71,11 @@ class Profile extends Component {
          <div className="col-md-4"></div>
       <div className="col-md-4">
          <form onSubmit={this.addUser}>
-         <input type="text" placeholder="Enter Your Name" className="form-control" onChange={this.search.bind(this)} />
+         <input type="text" placeholder="Enter Your Name" className="form-control" onChange={this.search.bind(this)} value={this.state.name}/>
          <br />
-         <input type="number" placeholder="Enter Your Number" className="form-control" onChange={this.phone.bind(this)}/>
+         <input type="number" placeholder="Enter Your Number" className="form-control" onChange={this.phone.bind(this)} value={this.state.phone_number}/>
          <br />
-         <button type="submit" className="btn btn-primary">Add</button>
+          <button type="submit" className="btn btn-primary">Add</button>
  </form>
          </div>
          <div className="col-md-4"></div>

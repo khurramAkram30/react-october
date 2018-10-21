@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 // import './App.css';
 import firebase from '../../auth/firebase';
 import { constants } from 'fs';
+
+import { BrowserRouter as Router,StaticRouter, Route, Link,Redirect,HashRouter } from 'react-router-dom';
+
 // import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 // import Firestore from 'firebase/firestore';
 class Profile extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state={
       name:'',
       phone_number:''
@@ -41,23 +44,31 @@ class Profile extends Component {
   // };
 
   addUser = e => {
-    e.preventDefault();
-    var user_datas=localStorage.getItem("user_data");
-    console.log("hihihihi",user_datas);
-    const db = firebase.firestore();
-    db.settings({
-      timestampsInSnapshots: true
-    });
-    var userRef = db.collection("users").add({
-      Name: this.state.name,
-      Phone_Number: this.state.phone_number
-    });  
-    this.setState({
-      name: '',
-      phone_number: ''
-    });
-  };
+  //   e.preventDefault();
+  //   var user_datas=localStorage.getItem("user_data");
+  //   console.log("hihihihi",user_datas);
+  //   const db = firebase.firestore();
+  //   db.settings({
+  //     timestampsInSnapshots: true
+  //   });
+  //   var userRef = db.collection("users").add({
+  //     Name: this.state.name,
+  //     Phone_Number: this.state.phone_number
+  //   });  
+  //   this.setState({
+  //     name: '',
+  //     phone_number: ''
+  //   });
+  // };
+  const {name,phone_number} =this.state;
+  console.log(this.props);
+  var arr=[];
+  arr.push({name,phone_number});
+  localStorage.setItem("profile",JSON.stringify(arr));
 
+  let path = `/Allimages`;
+    this.props.history.push(path);
+}
 
   render() {
     const {name,phone_number} =  this.state;
@@ -70,13 +81,11 @@ class Profile extends Component {
         <div className="row">
          <div className="col-md-4"></div>
       <div className="col-md-4">
-         <form onSubmit={this.addUser}>
          <input type="text" placeholder="Enter Your Name" className="form-control" onChange={this.search.bind(this)} value={this.state.name}/>
          <br />
          <input type="number" placeholder="Enter Your Number" className="form-control" onChange={this.phone.bind(this)} value={this.state.phone_number}/>
          <br />
-          <button type="submit" className="btn btn-primary">Add</button>
- </form>
+          <button type="submit" className="btn btn-primary" onClick={this.addUser}>Add</button>
          </div>
          <div className="col-md-4"></div>
  </div>

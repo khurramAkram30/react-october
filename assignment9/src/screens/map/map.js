@@ -15,12 +15,14 @@ constructor(){
    setPosition() {
       navigator.geolocation.getCurrentPosition(position => {
         this.setState({coords: position.coords})
+        console.log(this.state.coords);
       });
     }
   
 
       updateCoords({latitude, longitude}) {
-    this.setState({coords: {latitude, longitude}})
+    this.setState({coords: {latitude, longitude}});
+    console.log(this.state.coords);
   }
 
   componentDidMount() {

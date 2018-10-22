@@ -100,7 +100,7 @@ class Allimages extends Component {
         // arr.map(val =>{
         //     return console.log("asd",val);
         // })
-        // localStorage.setItem("images",JSON.stringify(arr));
+        localStorage.setItem("images",JSON.stringify(arr));
         // var getitems=localStorage.getItem(JSON.parse("images"));
         // getitems.map(val=>{
 

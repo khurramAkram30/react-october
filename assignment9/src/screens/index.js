@@ -3,6 +3,8 @@ import Profile from './profile/profile';
 import Allimg from './uplaodimages/images';
 import Maps from './map/map';
 import Beverages from './beverages/beverages';
+import Dashboard from './dashboard/dashboard';
+import Cardswipe from './cardswape/card';
 
 
 export {
@@ -10,6 +12,8 @@ export {
     Profile,
     Allimg,
     Maps,
-    Beverages
+    Beverages,
+    Dashboard,
+    Cardswipe
 
 }

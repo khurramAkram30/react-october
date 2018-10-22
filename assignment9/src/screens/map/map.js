@@ -2,8 +2,8 @@ import React,{Component} from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
 class Maps extends Component{
-constructor(){
-    super();
+constructor(props){
+    super(props);
     this.state = {
       coords: null
     };
@@ -27,6 +27,22 @@ constructor(){
 
   componentDidMount() {
     this.setPosition();
+    localStorage.getItem("beverages");
+    localStorage.getItem("timing");
+    localStorage.getItem("profile");
+    localStorage.getItem("images");
+    localStorage.getItem("user_data");
+    var images=JSON.parse(localStorage.getItem("images"));
+    console.log("asd",images.image1);
+    
+    
+    
+    
+  }
+
+  add(){
+    let path='./dashboard';
+    this.props.history.push(path);
   }
 
     render(){
@@ -43,7 +59,9 @@ constructor(){
           coords={coords}
           updateCoords={this.updateCoords}
         />}
-
+                    <form onSubmit={this.add.bind(this)}>
+                    <button>Submit</button>
+                    </form>
             </div>
         )
     }

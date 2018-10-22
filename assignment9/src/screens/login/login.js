@@ -54,6 +54,8 @@ class Login extends Component {
         // ...
         console.log(error);
       });
+      let path='./profile';
+      this.props.history.push(path);
   }
   render() {
     // const {coords} = this.state;

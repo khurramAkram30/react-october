@@ -1,19 +1,7 @@
-import Login from './login/login';
-import Profile from './profile/profile';
-import Allimg from './uplaodimages/images';
-import Maps from './map/map';
-import Beverages from './beverages/beverages';
-import Dashboard from './dashboard/dashboard';
-import Cardswipe from './cardswape/card';
-
+import LoginScreen from '../screens/login'
+import DashboardScreen from '../screens/dashboard'
+import MapScreen from '../screens/map'
 
 export {
-    Login,
-    Profile,
-    Allimg,
-    Maps,
-    Beverages,
-    Dashboard,
-    Cardswipe
-
+    LoginScreen, DashboardScreen, MapScreen
 }

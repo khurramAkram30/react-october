@@ -2,14 +2,13 @@ import firebase from 'firebase'
 
 // Initialize Firebase
 var config = {
-    apiKey: "AIzaSyDctvyQ1Hy8xRa2s6iyRmYFWWBLgKot2no",
-    authDomain: "fir-react-fea28.firebaseapp.com",
-    databaseURL: "https://fir-react-fea28.firebaseio.com",
-    projectId: "fir-react-fea28",
-    storageBucket: "fir-react-fea28.appspot.com",
-    messagingSenderId: "264633424254"
-  };
-//   firebase.initializeApp(config);
+    apiKey: "AIzaSyB7wDUQE1HLe7P7TuBgVIU2DEA57EXH2sY",
+    authDomain: "meetingapp3011.firebaseapp.com",
+    databaseURL: "https://meetingapp3011.firebaseio.com",
+    projectId: "meetingapp3011",
+    storageBucket: "meetingapp3011.appspot.com",
+    messagingSenderId: "228652578963"
+};
 const fire = firebase.initializeApp(config);
 const db = firebase.firestore();
 const auth = firebase.auth();

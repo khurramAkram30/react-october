@@ -11,8 +11,9 @@ class login extends Component {
 
 
     
-constructor() {
-    super();
+constructor(props) {
+    super(props);
+    console.log("zxc",props);
     this.state = {
         email: '',
         password: '',
@@ -75,7 +76,8 @@ clearLocalStorage(){
                     });
 
                    console.log("already logged in!!");
-                    this.props.history.push('/dashbrd');
+                  
+                //    this.props.history.push('/dashbrd');
                   
                     if (true) {
                        
@@ -150,7 +152,8 @@ clearLocalStorage(){
 
     
     Loginfirebase(email, password) {
-
+        
+        console.log("abcd",this.props);
         firebase.auth.signInWithEmailAndPassword(email, password)
             .then((res) => {
                 localStorage.setItem("userid", res.user.uid);
@@ -159,7 +162,7 @@ clearLocalStorage(){
                 this.setState({ islogin: true });
 
                 swal("Good job!", "Login Successfully", "success");
-
+                this.props.history.push("/dashboard");
 
             })
             .catch((error) => {
@@ -217,7 +220,7 @@ render() {
             </div>
             <div className="form-group">
                 <label>Password :</label>
-                <input type="password" onChange={this.handleChangePassword} className="form-control" />
+                <input type="password" className="form-control" onChange={this.handleChangePassword}  />
             </div>
         </div>
 

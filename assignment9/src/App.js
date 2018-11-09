@@ -59,10 +59,13 @@ constructor(prop){
 	  return (
 		  <div>
 
-			  <h1>This is header!</h1>
+			  <div className="container-fluid" style={{background:"red"}}>
+			  <h4>Meeting App</h4>
+			  </div>
 			  <Routes />
-			  <h1>This is footer!</h1>
-
+			  <div className="container-fluid" style={{background:"red", marginTop:"300px"}}>
+			  <p>All Right Reserved</p>
+			  </div>
 			  {
 				  
 				  

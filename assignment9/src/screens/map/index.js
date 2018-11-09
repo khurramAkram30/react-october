@@ -73,7 +73,7 @@ class Mapscreen extends Component {
 
                 {coords && <MyMapComponent
                     isMarkerShown
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJdeN0I2e7USVUmXotyl2hzgqKzdfHY1M&amp;v=3.exp&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `80%`, width: `100%` }} />}
                     containerElement={<div style={{ height: `80vh`, width: `100vh` }} />}
                     mapElement={<div style={{ height: `80%`, width: `100%` }} />}
@@ -168,7 +168,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
                 position={{ lat: props.coords.latitude, lng: props.coords.longitude }}
                 draggable={true}
                 onDragEnd={position => {
-                    props.updateCoords({ latitude: position.latLng.lat(), longitude: position.latLng.lng() })
+                props.updateCoords({ latitude: position.latLng.lat(), longitude: position.latLng.lng() })
                 }}
             />}
     </GoogleMap>

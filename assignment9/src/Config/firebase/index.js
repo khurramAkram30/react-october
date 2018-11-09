@@ -8,8 +8,7 @@ var config = {
     projectId: "fir-react-fea28",
     storageBucket: "fir-react-fea28.appspot.com",
     messagingSenderId: "264633424254"
-  };
-//   firebase.initializeApp(config);
+};
 const fire = firebase.initializeApp(config);
 const db = firebase.firestore();
 const auth = firebase.auth();

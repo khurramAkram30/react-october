@@ -9,8 +9,8 @@ const Routes = () => (
             <Route exact path="/" component={Screens.LoginScreen} />
             <Route path="/dashboard" component={Screens.DashboardScreen} />
             <Route path="/maps" component={Screens.MapScreen} />
-            {/* <PrivateRoute path="/dashboard" component={Screens.Dashboard} />
-            <Route path="/addForm" component={Screens.AddForm} /> */}
+            <Route path="/directions" component={Screens.directionsScreen} />
+         
         </div>
     </Router>
 );

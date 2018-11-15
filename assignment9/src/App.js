@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 import * as firebase from './config/firebase'
-
+import logo from './logo.svg';
 import Routes from './config/router'
+import { store,persistor } from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react'
+import { Provider } from 'react-redux';
 
 
-const providerx = firebase.provider;
+//const providerx = firebase.provider;
 
 class App extends Component {
 
@@ -57,20 +60,20 @@ constructor(prop){
 	  
 
 	  return (
-		  <div>
-
-			  <div className="container-fluid" style={{background:"red"}}>
-			  <h4>Meeting App</h4>
+		  <div className="App">
+			  {/* <header className="App-header-a"> */}
+				<div className="container" style={{background:"#337ab7",height:'80px',color:"white"}}>
+			<h1>Meeting App </h1>
+				</div>
+				
+							  {/* </header> */}
+			  <div className="container">
+			  {/* <Provider store={store}>
+     			 <PersistGate loading={null} persistor={persistor}> */}
+					  <Routes />
+				 		 {/* </PersistGate>
+   							 </Provider> */}
 			  </div>
-			  <Routes />
-			  <div className="container-fluid" style={{background:"red", marginTop:"300px"}}>
-			  <p>All Right Reserved</p>
-			  </div>
-			  {
-				  
-				  
-
-			}
 		  </div>
 	  )
   }

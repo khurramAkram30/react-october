@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import swal from 'sweetalert';
 import * as firebase from '../../config/firebase'
 //import { withRouter, Link, Redirect, Route, browserHistory } from "react-router-dom";
-import { withScriptjs, withGoogleMap, DirectionsRenderer, InfoWindow, GoogleMap, Marker, GoogleApiWrapper } from "react-google-maps"
+import { withScriptjs, withGoogleMap, DirectionsRenderer, InfoWindow, GoogleMap, Marker } from "react-google-maps"
 //const providerx = firebase.provider;
 import Calendar  from 'react-calendar';
 
@@ -32,10 +32,15 @@ class directionscreen extends Component {
         this.ExploreApiCoords = this.ExploreApiCoords.bind(this);
         this.onSearch = this.onSearch.bind(this);
         this.getDirections = this.getDirections.bind(this);
+        this.setPositionFromFirebase = this.setPositionFromFirebase.bind(this);
+        this.getCurrentUser = this.getCurrentUser.bind(this);
     }
 
 
 
+    setPositionFromFirebase(){
+       
+    }
 
     setPosition() {
         navigator.geolocation.getCurrentPosition(position => {
@@ -48,32 +53,63 @@ class directionscreen extends Component {
     }
 
 
+
+getCurrentUser(){
+
+    //console.log("componentDidMount");
+    firebase.auth.onAuthStateChanged(user => {
+        if (user) {
+            //console.log(user);
+            this.setState({ currentuser: user });
+            // this.setPosition();
+
+
+            // setTimeout(() => {
+            //     this.ExploreApiCoords();
+            // }, 2000);
+
+
+
+        } else {
+            console.info('Must be authenticated');
+            this.props.history.push('/');
+        }
+    });
+
+
+
+}
+
+
     componentDidMount() {
 
-        firebase.auth.onAuthStateChanged(user => {
-            if (user) {
-             
-                this.setState({ currentuser: user });
-                // this.setPosition();
-                console.log("componentDidMount");
+         
+      
+        
+        setTimeout(() => {
 
-                // setTimeout(() => {
-                //     this.ExploreApiCoords();
-                // }, 2000);
-              
-               
+            //this.setPositionFromFirebase();
+            //const { latcord, lngcord} = this.state;
+            //console.log(latcord, lngcord)
 
-            } else {
-                console.info('Must be authenticated');
-                this.props.history.push('/');
-            }
-        });
+            const { currentuser } = this.state;
+           // console.log(currentuser, " currentuser");
+            firebase.db.collection("tbluserprofile").where("uid", "==", currentuser.uid).get()
+                .then((query) => {
+                    query.forEach((doc) => {
+                        this.setState({ latcord: doc.data().latitude, lngcord: doc.data().longitude })
+                        this.ExploreApiCoords(baseurl.concat("ll=", doc.data().latitude, ",", doc.data().longitude));
+                    });
+                })
 
 
-
+            
+        }, 1000);
 
 
     }
+
+
     // getDerivedStateFromProps(props ,state)
     // {
     //     console.log(props, "getDerivedStateFromProps", state);
@@ -83,14 +119,11 @@ class directionscreen extends Component {
     componentWillMount(){
         //const { locationNear } = this.state;
 
-        console.log("componentWillMount");
-        this.setPosition();
+       // console.log("componentWillMount");
 
-         setTimeout(() => {
-             const { coords } = this.state;
-             console.log(coords);
-             this.ExploreApiCoords(baseurl.concat("ll=", coords.latitude, ",", coords.longitude));
-                }, 1000);
+      
+        this.getCurrentUser();
+        this.setPosition();
 
 
 
@@ -125,7 +158,12 @@ class directionscreen extends Component {
             fetch(url)
                 .then(res => res.json())//response type
                 .then(data => {
-                    let locations = data.response.groups[0].items;
+
+                    if (data) {
+                        
+                        //console.log(data.response);
+                        //console.log(data.response.groups.length);
+                         let locations = data.response.groups[0].items;
                  
                  locations.map(explore => {
 
@@ -150,40 +188,23 @@ class directionscreen extends Component {
 
                           i>1?
                           this.setState({ 
-                                  
                             locmarkers: [...this.state.locmarkers ,locmarker] 
-                        
                               }) : this.setState({
 
                                   locmarkers: locmarker
-
                               })
-
-
-                        //   this.setState({
-                        //       locationNear: this.state.locationNear.concat(
-                        //           {
-                        //               nearlocations: {
-                        //                   coordinates: { latitude: Mlat, longitude: Mlng }, venue: explore.venue.name
-                        //               }
-                        //             }
-                        //       )
-                            
-                        //       }
-                        //     )
-                          //locationNear.push({ coordinates: { latitude: lat, longitude: lng } } );
-                          //console.log(explore.venue.id, explore.venue.name, explore.venue.location.address
-                          //, explore.venue.location.lat, explore.venue.location.lng);
-                         
                           i++;
                         }
                        
                     })
-                    
-                });
 
-            //console.log(locationNear, " locationNear");
-            
+
+                    }
+                   
+                    
+                }).catch(error => {
+                    //console.error('Error:', error)
+                }) ;
         }
 
 
@@ -196,11 +217,12 @@ class directionscreen extends Component {
 
     getDirections(selectedCoords) {
 
-        this.setState({ selectedCoords });
+        const { latcord , lngcord } = this.state;
+       this.setState({ selectedCoords });
        const DirectionsService = new google.maps.DirectionsService();
 
         DirectionsService.route({
-            origin: new google.maps.LatLng(24.8812296, 67.0727269),
+            origin: new google.maps.LatLng(latcord, lngcord),
             destination: new google.maps.LatLng(selectedCoords.lat , selectedCoords.Lng),
             travelMode: google.maps.TravelMode.DRIVING,
         }, (result, status) => {
@@ -217,7 +239,7 @@ class directionscreen extends Component {
 
     onSearch(e){
 
-        console.log(e.target.value);
+       // console.log(e.target.value);
 
         if (e.target.value.length > 4) {
             let url = baseurl.concat("near=", e.target.value);
@@ -246,23 +268,30 @@ class directionscreen extends Component {
         
             
         
-
+        let Mapstyle = { 'textAlign': '-webkit-center', 'marginTop' : '20px'}
 
         //console.log(locmarkers , " marker");
         return (<div>
 
-<input onChange={this.onSearch} placeholer="karachi"/>
+        
+            <label>Find Location :</label>
+            <input className="form-control" onChange={this.onSearch} placeholer="karachi"/>
+            <div className="row">
+                <div className="col-md-12" style={Mapstyle}>
 
-            {coords && <MyMapComponent
+           
+            {coords && <MyMapComponent 
                 isMarkerShown
                 googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJdeN0I2e7USVUmXotyl2hzgqKzdfHY1M&amp;v=3.exp&amp;libraries=geometry,drawing,places"
                 loadingElement={<div style={{ height: `80%`, width: `100%` }} />}
-                containerElement={<div style={{ height: `80vh`, width: `100vh` }} />}
+                        containerElement={<div style={{ height: `80vh`, width: `100%` }} />}
                 mapElement={<div style={{ height: `80%`, width: `100%` }} />}
                 coords={coords}
                 locmarker={locmarkers}
                 directions={directions}
             />}
+                </div>
+            </div>
 
 
         </div>);
@@ -273,8 +302,8 @@ class directionscreen extends Component {
 showCalenderscreen(selectedCoords , venue){
 
     //const { showcalender } = this.state;
-    console.log(selectedCoords," selectedCoords");
-    console.log(venue, " venue");
+    //console.log(selectedCoords," selectedCoords");
+    //console.log(venue, " venue");
     
     this.setState({ showcalender: true, selectedCoords , venue});
 }
@@ -286,14 +315,16 @@ showCalenderscreen(selectedCoords , venue){
 
         try {
 
-            const { currentuser } = this.state;
+            const { currentuser , latcord , lngcord } = this.state;
             let useruid = currentuser.uid;
             let userdname = currentuser.displayName;
             let status = "PENDING";
+            let userCoords = {latcord , lngcord}
+            let creationtime = Date();
+            let popup = false;
+            //console.log(useruid, userdname, status, matchername, matcheruid, selectedCoords, venue, date);
 
-            console.log(useruid, userdname, status, matchername, matcheruid, selectedCoords, venue, date);
-
-            firebase.db.collection("tblusermeetings").add({ useruid, userdname, matchername, matcheruid, selectedCoords, venue, date, status })
+            firebase.db.collection("tblusermeetings").add({ useruid, userdname, matchername, matcheruid, selectedCoords, userCoords, venue, date, status, creationtime, popup})
                 .then().catch(err => swal('There was an error:', err, "error"))
 
         } catch (error) {
@@ -324,18 +355,18 @@ onsendRequest()
 
         swal({
         title: "Send the request?",
-        text: "Do you want to Send the request? " + date + " !!!! " + time,
+        text: "Do you want to Send the request? " + date + " !!!! ",
         icon: "info",
         buttons: ["Cancel", "Yes"],
     })
         .then((isyes) => {
             if (isyes) {
 
-                console.log(matchername, matcheruid, selectedCoords, venue, date);
+                //console.log(matchername, matcheruid, selectedCoords, venue, date);
                 //Submit the Data to database!!!
                 this.submitData_db(matchername, matcheruid, selectedCoords, venue, date);
 
-                console.log("submitted");
+                //console.log("submitted");
 
 
                 swal("Poof! Your Request has been Sent!", {
@@ -363,12 +394,21 @@ onsendRequest()
 
 
   DateTimeSelectionScreen(){
+      let Mapstyle = { 'textAlign': '-webkit-center', 'marginTop': '20px' }
 
-      return (<div><Calendar
-          onChange={this.onChange}
-          value={this.state.date}
-      /> <input type="time" onChange={this.onTimeChange} />
-          <div>  <button onClick={this.onsendRequest.bind(this)}>Send Request</button> </div>
+      return (<div>
+
+          <label> Select Date/Time for Meeting</label>
+          <input type="time" className="form-control" onChange={this.onTimeChange} />
+
+          <div className="row">
+              <div className="col-md-12" style={Mapstyle}>
+          <Calendar onChange={this.onChange} value={this.state.date} /> 
+          </div>
+          </div>
+
+          
+          <button className="btn btn-primary" onClick={this.onsendRequest.bind(this)}>Send Request</button>
       </div>);
 
 

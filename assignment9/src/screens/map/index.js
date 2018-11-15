@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
 import * as firebase from '../../config/firebase'
-import { withRouter, Link, Redirect, Route, browserHistory } from "react-router-dom";
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-const providerx = firebase.provider;
+
+//const providerx = firebase.provider;
 
 
 
@@ -67,21 +67,29 @@ class Mapscreen extends Component {
 
     profileScreen4() {
         const { coords } = this.state;
-
+        let Mapstyle = { 'textAlign': '-webkit-center', 'marginTop': '20px' }
         return (
-            <div>
 
+
+            <div className="row">
+                <div className="col-md-12" style={Mapstyle}>
+                    <input style={{ width: `100%` }} className="btn btn-primary" type="button" value="submit" onClick={this.submitDatatoFirestore} />
+                   </div>
+                   
+                    <div className="col-md-12" style={Mapstyle}>
+                    
                 {coords && <MyMapComponent
                     isMarkerShown
                     googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJdeN0I2e7USVUmXotyl2hzgqKzdfHY1M&amp;v=3.exp&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `80%`, width: `100%` }} />}
-                    containerElement={<div style={{ height: `80vh`, width: `100vh` }} />}
+                        containerElement={<div style={{ height: `80vh`, width: `100%` }} />}
                     mapElement={<div style={{ height: `80%`, width: `100%` }} />}
                     coords={coords}
                     updateCoords={this.updateCoords}
                 />}
 
-                <input type="button" value="submit" onClick={this.submitDatatoFirestore} />
+                
+            </div>
             </div>
 
         );
@@ -109,7 +117,7 @@ submitDatatoFirestore(){
         pimage = profile.photoURL;
         })
 
-    console.log(currentuser.uid);
+    //console.log(currentuser.uid);
 
     const niname = localStorage.getItem("niname");
     const pnumber = localStorage.getItem("pnumber");
@@ -133,7 +141,7 @@ submitDatatoFirestore(){
         firebase.db.collection("tbluserprofile").add({ uid, email, displayname, puid, pimage, nickname: niname, phonenumber: pnumber, image1, image2, image3, beverages, duration, latitude, longitude })
             .then().catch(err => swal('There was an error:',err,"error"))
 
-        localStorage.setItem("dashboard","showmeeting");
+        //localStorage.setItem("dashboard","showmeeting");
         swal("Good Job!", "Successfully Updated", "success");
         this.props.history.push('/dashboard');
 
@@ -151,7 +159,8 @@ submitDatatoFirestore(){
     render(){
 
 
-        return (<div>  <button onClick={this.getcords.bind(this)}>getcords</button> {this.profileScreen4()}</div>)
+        return (<div>  
+         {this.profileScreen4()}</div>)
     }
 
 
